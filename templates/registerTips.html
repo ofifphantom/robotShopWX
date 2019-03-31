@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ <html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf8" />
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../static/css/weui.css" type="text/css" />
+<script  src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript"></script>
+<script>
+wx.config({
+
+    debug: false,
+    appId: 'wx2c456d99ce2a2e86',
+    timestamp: {{ WXconfig.timestamp }},
+    nonceStr: '{{ WXconfig.nonceStr }}',
+    signature: '{{ WXconfig.signature }}',
+    jsApiList: ['chooseImage','uploadImage']
+});
+wx.ready(function(){
+    alert('请先扫码关注我们')
+});
+wx.error(function(res){
+	alert(res);
+});
+</script>
+<title>请扫码关注</title>
+</head>
+<body>
+<img src="../../static/qrcode_for_gh_13a22430f791_344.jpg"/>
+
+</body>
+</html>

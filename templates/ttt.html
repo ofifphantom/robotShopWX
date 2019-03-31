@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+        <title>Upload File</title>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js" type="text/javascript"></script>
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
+        <script src="./FileSaver.js"></script>
+        <style type="text/css">
+        .query_hint{
+         border:5px solid #939393;
+         width:250px;
+         height:50px;
+         line-height:55px;
+         padding:0 20px;
+         position:absolute;
+         left:50%;
+         margin-left:-140px;
+         top:50%;
+         margin-top:-40px;
+         font-size:15px;
+         color:#333;
+         font-weight:bold;
+         text-align:center;
+         background-color:#f9f9f9;
+        }
+        .query_hint img{position:relative;top:10px;left:-8px;}
+        </style>
+    </head>
+    <body>
+        <div hidden="hidden" id="query_hint" class="query_hint">
+           <img src="http://static.oschina.net/uploads/space/2014/0430/115223_oFLD_1163935_thumb.gif" />正在加载，请稍等...
+          </div>
+        <div id="showFile">
+		<input id="file" type="file"/>
+		<p/>
+		<button v-on:click="newLine">upload</button>
+		<button v-on:click="downLoadFile">download</button>
+            <br/>
+		<span v-html="newFile"></span>
+		</div>
+        <script type="text/javascript">
+            var downLoadString = "";
+			var vm = new Vue({
+			el: '#showFile',
+			data: {
+				newFile:"",
+                newText:""
+			},
+			methods: {
+				newLine:function (event) {
+					var objFile = document.getElementById("uploadFile");
+					var files = $('#file').prop('files');
+					if(files.length == 0){
+						alert('please choese a file');
+					}else{
+                        $('#query_hint').removeAttr("hidden");
+						var path = $('#file').val();
+						var extendsName = path.substring(path.lastIndexOf('.') + 1);
+						if (extendsName == "doc" || extendsName == "docx"){
+                            alert("no support doc or docx")
+						}else{
+							var reader = new FileReader();//新建一个FileReader
+							reader.readAsText(files[0]);//读取文件
+							reader.onload = function(evt){ //读取完文件之后会回来这里
+								var nowFile = evt.target.result;
+								nowFile = nowFile.replace(/[\r\n\t\b]/g,"").replace(/\s*/g,"");
+								var line = 1;
+								var changNum = 4750;
+								if (nowFile.length < changNum){
+									line = 1;
+								}
+								else{
+									if (nowFile.length % changNum == 0){
+										line = nowFile.length / changNum;
+									}else{
+										line = Math.ceil(nowFile.length / changNum);
+									}
+								}
+								var fileArr = new Array();
+								for(i=0;i<=line;i++){
+									if (i==0){
+										fileArr[i] = nowFile.substring(0,changNum);
+									}else{
+										fileArr[i] = nowFile.substring(changNum*i,changNum*i+changNum)
+									}
+								}
+								newString = "";
+								for(i=0;i<=line;i++){
+									lineString = fileArr[i].toString();
+                                    downLoadString += fileArr[i].toString() + "\r\r\r\r\r\r\r";
+									lineString += "<br/><br/><br/><br/><br/><br/><br/>";
+									newString += lineString
+								}
+								vm.newFile = newString;
+                                $('#query_hint').attr("hidden","hidden");
+							}
+						}
+					}
+				},
+                downLoadFile:function(event){
+					var blob = new Blob([downLoadString], {type: "text/plain;charset=utf-8"});
+					saveAs(blob, "new.txt");
+				}
+			}
+			})
+
+		</script>
+    </body>
+</html>

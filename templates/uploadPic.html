@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ <html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8" />
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../static/css/weui.css" type="text/css" />
+<script  src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript"></script>
+<script  src="../../static/jquery-1.7.1.min.js" type="text/javascript"></script>
+<script>
+wx.config({
+
+    debug: false,
+    appId: 'wx2c456d99ce2a2e86',
+    timestamp: {{ WXconfig.timestamp }},
+    nonceStr: '{{ WXconfig.nonceStr }}',
+    signature: '{{ WXconfig.signature }}',
+    jsApiList: ['chooseImage','uploadImage']
+});
+wx.ready(function(){
+});
+wx.error(function(res){
+	alert(res);
+});
+function choseImage(){
+	wx.chooseImage({
+	    count: 1,
+	    sizeType: ['original', 'compressed'],
+	    sourceType: ['camera'],
+	    success: function (res) {
+	        var localIds = res.localIds;
+	        wx.uploadImage({
+			    localId: localIds[0],
+			    isShowProgressTips: 1,
+			    success: function (res) {
+			        var mediaId = res.serverId;
+			        $.ajax({
+                        url: "http://shop.wuliwuli.cn/wx/saveUserInfo/",
+                        type: "POST",
+						data: JSON.stringify({
+                            "mediaID": mediaId,
+                            "openID":"{{ openID }}"
+                        }),
+                        dataType: "json",
+                        success: function (data) {
+                            window.location.href = "/wx/registerSuccess?doorID={{ doorID }}";
+                        },
+                        error: function (data) {
+                            window.location.href = "/wx/registerFailed?openID={{ openID }}&doorID={{ doorID }}";
+                        }
+                    });
+			    }
+			});
+	    }
+	});
+}
+</script>
+<title>注册</title>
+</head>
+<body>
+	<div class="page">
+    <div class="page__hd">
+        <h1 class="page__title">上传自拍</h1>
+        <br />
+        <p class="page__desc">请使用摄像头上传自己照片</p>
+    </div>
+    <br /><br />
+    <div class="weui-grids">
+            <div class="button-sp-area">
+	    		<a href="javascript:;" class="weui-btn weui-btn_plain-primary" onclick="choseImage()">点击自拍</a>
+			</div>
+        <br /><br /><br /><br /><br /><br /><br /><br /><br />
+        <p align="center" class="weui-grid__label">依据相关法律我们将保护注册用户隐私</p>
+    </div>
+</div>
+</body>
+</html>

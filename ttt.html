@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+        <title>Upload File</title>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js" type="text/javascript"></script>
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
+    </head>
+    <body>
+        <div id="showFile">
+		<span v-html="newFile"></span>
+		<input id="uploadFile" type="file"/>
+		<p/>
+		<button v-on:click="newLine">upload</button>
+		</div>
+        <script type="text/javascript">
+			var vm = new Vue({
+			el: '#showFile',
+			data: {
+				newFile:""
+			},
+			methods: {
+				newLine:function (event) {
+					var objFile = document.getElementById("uploadFile");
+					var files = $('#uploadFile').prop('files');
+					if(files.length == 0){
+						alert('please choese a file');
+					}else{
+						//var path = $('#uploadFile').val();
+						//var extendsName = path.substring(path.lastIndexOf('.') + 1);
+						//if (extendsName == "doc" || extendsName == "docx"){
+							//alert("word");
+						//}else{
+							var reader = new FileReader();
+							reader.readAsText(files[0], "GBK");
+							reader.onload = function(evt){ 
+								var nowFile = evt.target.result;
+								nowFile = nowFile.replace(/[\r\n]/g,"").replace(/\ +/g,"");
+								var line = 1;
+								var changNum = 45;
+								if (nowFile.length < changNum){
+									line = 1;
+								}
+								else{
+									if (nowFile.length % changNum == 0){
+										line = nowFile.length / changNum;
+									}else{
+										line = Math.ceil(nowFile.length / changNum);
+									}
+								}
+								var fileArr = new Array();
+								for(i=0;i<=line;i++){
+									if (i==0){
+										fileArr[i] = nowFile.substring(0,changNum-1);
+									}else{
+										fileArr[i] = nowFile.substring(changNum*i,changNum*i+changNum-1)
+									}
+								}
+								newString = "";
+								for(i=0;i<=line;i++){
+									lineString = fileArr[i].toString();
+									lineString += "<p>";
+									newString += lineString
+								}
+								vm.newFile = newString;
+							}
+						}
+					//}
+				}
+			}
+			})
+		</script>		
+    </body>
+</html>

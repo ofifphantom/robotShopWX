@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ <html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8" />
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../static/css/weui.css" type="text/css" />
+<script  src="../../static/jquery-1.7.1.min.js" type="text/javascript"></script>
+<script>
+function openDoor(){
+    $.get("http://39.107.24.82:8081/door/",function(res){
+        if(res['status'] == 1){
+           alert("欢迎您进入");
+        }else{
+           alert("开门超时，请重新开门");
+        }
+    });
+}
+</script>
+<title>注册</title>
+</head>
+<body>
+	<div class="page">
+    <div class="weui-msg">
+        <div class="weui-msg__icon-area"><i class="weui-icon-success weui-icon_msg"></i></div>
+        <div class="weui-msg__text-area">
+            <h2 class="weui-msg__title">注册成功</h2>
+            <p class="weui-msg__desc">恭喜您，注册成功，您可以开门了</p>
+        </div>
+        <div class="weui-msg__opr-area">
+            <p class="weui-btn-area">
+                <a id="openDoor" class="weui-btn weui-btn_primary" style="color:white" onclick="openDoor()">开门</a>
+            </p>
+        </div>
+        <div class="weui-msg__extra-area">
+            <div class="weui-footer">
+                <p class="weui-footer__text">Copyright &copy; 2017 小椰科技</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
